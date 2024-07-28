@@ -30,10 +30,8 @@ export default function LoginForm() {
 
     // get the response
     const responseData = await response.json()
-    console.log(responseData)
 
     if(responseData.status) {
-      console.log('Account Created')
       redirect('/login')
     }
     else {

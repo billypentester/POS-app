@@ -49,7 +49,7 @@ export default function Dashboard() {
           <Card className="w-1/4">
             <CardHeader className="pb-2">
               <CardDescription>Total Products</CardDescription>
-              <CardTitle className="text-4xl">350</CardTitle>
+              <CardTitle className="text-4xl text-primary">350</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-xs text-muted-foreground">
@@ -60,7 +60,7 @@ export default function Dashboard() {
           <Card className="w-1/4">
             <CardHeader className="pb-2">
               <CardDescription>Total Customers</CardDescription>
-              <CardTitle className="text-4xl">1240</CardTitle>
+              <CardTitle className="text-4xl text-primary">1240</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-xs text-muted-foreground">
@@ -71,7 +71,7 @@ export default function Dashboard() {
           <Card className="w-1/4">
             <CardHeader className="pb-2">
               <CardDescription>Total Sale</CardDescription>
-              <CardTitle className="text-4xl">Rs. 3,00,000</CardTitle>
+              <CardTitle className="text-4xl text-primary">Rs. 3,00,000</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-xs text-muted-foreground">
@@ -82,7 +82,7 @@ export default function Dashboard() {
           <Card className="w-1/4">
             <CardHeader className="pb-2">
               <CardDescription>This Profit</CardDescription>
-              <CardTitle className="text-4xl">Rs. 8,00,000</CardTitle>
+              <CardTitle className="text-4xl text-primary">Rs. 8,00,000</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-xs text-muted-foreground">
@@ -108,7 +108,7 @@ export default function Dashboard() {
                   tickFormatter={(value) => value.slice(0, 3)}
                 />
                 <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+                <Bar dataKey="mobile" fill="hsl(var(--primary))" radius={4} />
                 {/* <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} /> */}
               </BarChart>
             </ChartContainer>

@@ -35,26 +35,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { cn } from "@/lib/utils"
-
-export const LoadingSpinner = ({className}: any) => {
-  return(
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={cn("animate-spin", className)}
-    >
-      <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-    </svg>
-  )
-}
+import { LoadingSpinner } from "@/components/ui/loader"
 
 export default function Dashboard({ children }: Readonly<{ children: React.ReactNode;}>) {
 
@@ -81,11 +62,8 @@ export default function Dashboard({ children }: Readonly<{ children: React.React
   }, [router])
 
   useEffect(()=>{
-    console.log(pathname)
-    // seperate /dashboard from pathname
     let path = pathname.split('/dashboard').filter(Boolean)
     let activeRoute = path[0] === undefined ? "" : path[0]
-    console.log(activeRoute)
     setActivetab(activeRoute)
   }, [pathname])
 
@@ -104,7 +82,7 @@ export default function Dashboard({ children }: Readonly<{ children: React.React
                 <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
                   <Link href="/" className="flex items-center gap-2 font-semibold">
                     <Package2 className="h-6 w-6" />
-                    <span className="">POS Gate</span>
+                    <span className=""><span className="text-primary">POS</span> Gate</span>
                   </Link>
                   <Button variant="outline" size="icon" className="ml-auto h-8 w-8">
                     <Bell className="h-4 w-4" />
@@ -232,7 +210,7 @@ export default function Dashboard({ children }: Readonly<{ children: React.React
                   </SheetContent>
                 </Sheet>
                 <div className="w-full flex-1">
-                  <form>
+                  {/* <form>
                     <div className="relative">
                       <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                       <Input
@@ -241,7 +219,7 @@ export default function Dashboard({ children }: Readonly<{ children: React.React
                         className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
                       />
                     </div>
-                  </form>
+                  </form> */}
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>

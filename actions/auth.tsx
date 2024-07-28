@@ -17,8 +17,6 @@ async function LoginAccount(data: LoginData): Promise<any> {
       
           const responseData:any = await response.json()
 
-          console.log(responseData)
-
           return {
             status: responseData.status,
             message: responseData.message,
