@@ -1,24 +1,24 @@
 'use server'
 
-interface IGetProduct {
+interface IGetCustomer {
   token: string
-  product_id: number
+  customer_id: number
 }
 
-interface IUpdateProduct {
+interface IUpdateCustomer {
   obj: object,
-  product_id: number,
+  customer_id: number,
   token: string
 }
 
-interface IAddProduct {
+interface IAddCustomer {
   token: string
   obj: object,
 }
 
-async function GetProducts(token: string): Promise<any> {
+async function GetCustomers(token: string): Promise<any> {
     try{
-        const response = await fetch('http://localhost:5000/api/inventory', {
+        const response = await fetch('http://localhost:5000/api/customer', {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -43,9 +43,9 @@ async function GetProducts(token: string): Promise<any> {
     }
 }
 
-async function updateProduct(data: IUpdateProduct): Promise<any> {
+async function updateCustomer(data: IUpdateCustomer): Promise<any> {
   try{
-      const response = await fetch(`http://localhost:5000/api/inventory/${data.product_id}`, {
+      const response = await fetch(`http://localhost:5000/api/customer/${data.customer_id}`, {
           method: 'PATCH',
           body: JSON.stringify(data.obj),
           headers: {
@@ -71,9 +71,9 @@ async function updateProduct(data: IUpdateProduct): Promise<any> {
   }
 }
 
-async function addProduct(data: IAddProduct): Promise<any> {
+async function addCustomer(data: IAddCustomer): Promise<any> {
   try{
-      const response = await fetch('http://localhost:5000/api/inventory/', {
+      const response = await fetch('http://localhost:5000/api/customer/', {
           method: 'POST',
           body: JSON.stringify(data.obj),
           headers: {
@@ -99,24 +99,24 @@ async function addProduct(data: IAddProduct): Promise<any> {
   }
 }
 
-async function GetProduct(data: IGetProduct): Promise<any> {
+async function GetCustomer(data: IGetCustomer): Promise<any> {
   try{
-      const { token, product_id } = data
-      const response = await fetch(`http://localhost:5000/api/inventory/${product_id}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
-          }
-        })
-    
-        const responseData:any = await response.json()
-
-        return {
-          status: responseData.status,
-          message: responseData.message,
-          data: responseData.data
+      const { token, customer_id } = data
+      const response = await fetch(`http://localhost:5000/api/customer/${customer_id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
         }
+      })
+  
+      const responseData:any = await response.json()
+
+      return {
+        status: responseData.status,
+        message: responseData.message,
+        data: responseData.data
+      }
   }
   catch(error: any){
       return {
@@ -127,4 +127,4 @@ async function GetProduct(data: IGetProduct): Promise<any> {
   }
 }
 
-export { GetProducts, GetProduct, updateProduct, addProduct}
+export { addCustomer, GetCustomers, updateCustomer, GetCustomer }

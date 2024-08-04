@@ -1,6 +1,5 @@
 'use client'
 
-import { GetProduct } from "@/actions/products";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,22 +32,17 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 
-interface IProduct {
-  product_id: string;
+interface ICustomer {
   name: string;
-  price: number;
-  quantity: number;
-  description: string;
-  category: string;
-  created_at: string;
+  phone_number: string
 }
 
-import { updateProduct } from '@/actions/products'
 import { useToast } from "@/components/ui/use-toast";
+import { GetCustomer, updateCustomer } from "@/actions/customers";
 
-export default function Product({ params }: { params: { slug: string } }) {
+export default function EditCustomer({ params }: { params: { slug: string } }) {
 
-  const [product, SetProduct] = useState<IProduct>()
+  const [customer, SetCustomer] = useState<ICustomer>()
   const router = useRouter();
   const { toast } = useToast()
 
@@ -58,16 +52,13 @@ export default function Product({ params }: { params: { slug: string } }) {
     if(token){
         let data = {
             token, 
-            product_id: Number(params.slug)
+            customer_id: Number(params.slug)
         }
-        GetProduct(data).then((response)=> {
+        GetCustomer(data).then((response)=> {
             if(response.status) {
-                SetProduct(response.data)
+                SetCustomer(response.data)
                 form.setValue('name', response.data.name)
-                form.setValue('price', response.data.price)
-                form.setValue('quantity', response.data.quantity)
-                form.setValue('category', response.data.category)
-                form.setValue('description', response.data.description)
+                form.setValue('phone_number', response.data.phone_number)
             }
         })
     }
@@ -79,37 +70,31 @@ export default function Product({ params }: { params: { slug: string } }) {
 
   const FormSchema = z.object({
     name: z.string(),
-    price: z.number({ message: "Price must be a number" }),
-    quantity: z.number(),
-    category: z.string(),
-    description: z.string()
+    phone_number: z.string()
   });
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       name: "",
-      price: 0,
-      quantity: 0,
-      category: "",
-      description: ""
+      phone_number: ""
     },
   });
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
     let data: any = {
-      product_id: Number(params.slug),
+      customer_id: Number(params.slug),
       obj: values,
       token: localStorage.getItem('posauth')
     }
-    updateProduct(data).then((response:any)=> {
+    updateCustomer(data).then((response:any)=> {
       if(response.status) {
         toast({
           variant: "destructive",
-          title: "Product updated successfully"
+          title: "Customer updated successfully"
         })
         setTimeout(()=> {
-          router.push('/dashboard/products')
+          router.push('/dashboard/customers')
         }, 500)
       }
     })
@@ -127,19 +112,19 @@ export default function Product({ params }: { params: { slug: string } }) {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink>
-                <Link href="/dashboard/products">Products</Link>
+                <Link href="/dashboard/customers">Customers</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Edit Product</BreadcrumbPage>
+              <BreadcrumbPage>Edit Customer</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
         <Card className="w-full bg-muted/40">
           <CardHeader>
-            <CardTitle className="text-primary">Edit Product</CardTitle>
-            <CardDescription>Update product you want to be</CardDescription>
+            <CardTitle className="text-primary">Edit Customer</CardTitle>
+            <CardDescription>Update customer you want to be</CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>
@@ -152,7 +137,7 @@ export default function Product({ params }: { params: { slug: string } }) {
                       <FormItem>
                         <FormLabel>Name <span className="text-primary">*</span></FormLabel> 
                         <FormControl>
-                          <Input type="text" placeholder="Enter product name" {...field} />
+                          <Input type="text" placeholder="Enter customer name" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -160,59 +145,18 @@ export default function Product({ params }: { params: { slug: string } }) {
                   />
                   <FormField
                     control={form.control}
-                    name="quantity"
+                    name="phone_number"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Quantity <span className="text-primary">*</span></FormLabel>
+                        <FormLabel>Phone Number <span className="text-primary">*</span></FormLabel>
                         <FormControl>
-                          <Input type="number" placeholder="Enter product quantity" {...field} onChange={(e)=> form.setValue('quantity', Number(e.target.value))} />
+                          <Input type="number" placeholder="Enter customer phone_number" {...field} onChange={(e)=> form.setValue('phone_number', (e.target.value))} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                 </div>
-                <div id="customInputField" className="flex space-x-5">
-                  <FormField
-                    control={form.control}
-                    name="price"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Price <span className="text-primary">*</span></FormLabel>
-                        <FormControl>
-                          <Input type="number" placeholder="Enter product price" {...field} onChange={(e)=> form.setValue('price', Number(e.target.value))}  />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="category"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Category</FormLabel>
-                        <FormControl>
-                          <Input type="text" placeholder="Enter product category" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Description</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="Enter product description" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
                 <Button type="submit">Submit</Button>
               </form>
             </Form>

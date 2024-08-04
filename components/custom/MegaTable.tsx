@@ -4,6 +4,7 @@ import {
 import { Input } from "../ui/input"
 import { CirclePlus, Download, Search } from "lucide-react"
 import { Button } from "../ui/button"
+import Link from "next/link";
 
 interface MegaTableProps {
     title: string;
@@ -11,10 +12,11 @@ interface MegaTableProps {
     addNew: boolean;
     searchable: boolean
     children: React.ReactNode;
+    addNewLink: string
 }
 
 
-export const MegaTable = ({ title, exportCSV, addNew, searchable, children }: MegaTableProps) => {
+export const MegaTable = ({ title, exportCSV, addNew, searchable, addNewLink, children }: MegaTableProps) => {
 
     return(
       <section className="flex flex-col space-y-5">
@@ -29,7 +31,7 @@ export const MegaTable = ({ title, exportCSV, addNew, searchable, children }: Me
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                       type="search"
-                      placeholder="Search products..."
+                      placeholder="Search anything..."
                       className="w-full appearance-none bg-background pl-8 shadow-none"
                     />
                   </div>
@@ -44,9 +46,11 @@ export const MegaTable = ({ title, exportCSV, addNew, searchable, children }: Me
             }
             {
               addNew &&
-              <Button>
-                <CirclePlus className="mr-2 h-4 w-4" /> Add 
-              </Button>
+              <Link href={addNewLink}>
+                <Button>
+                  <CirclePlus className="mr-2 h-4 w-4" /> Add 
+                </Button>
+              </Link>
             }
           </div>
         </div>

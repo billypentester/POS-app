@@ -10,6 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Textarea } from "@/components/ui/textarea"
 import { z } from "zod"
+import { addProduct } from "@/actions/products"
 
 import Link from "next/link"
 
@@ -42,8 +43,6 @@ interface IProduct {
   category: string;
   created_at: string;
 }
-
-import { updateProduct } from '@/actions/products'
 import { useToast } from "@/components/ui/use-toast";
 
 export default function Product({ params }: { params: { slug: string } }) {
@@ -53,34 +52,16 @@ export default function Product({ params }: { params: { slug: string } }) {
   const { toast } = useToast()
 
   useEffect(()=> {
-
     const token = localStorage.getItem('posauth')
-    if(token){
-        let data = {
-            token, 
-            product_id: Number(params.slug)
-        }
-        GetProduct(data).then((response)=> {
-            if(response.status) {
-                SetProduct(response.data)
-                form.setValue('name', response.data.name)
-                form.setValue('price', response.data.price)
-                form.setValue('quantity', response.data.quantity)
-                form.setValue('category', response.data.category)
-                form.setValue('description', response.data.description)
-            }
-        })
+    if(!token){
+        router.push('/login')
     }
-    else {
-      router.push('/login')
-    }
-
   }, [])
 
   const FormSchema = z.object({
     name: z.string(),
     price: z.number({ message: "Price must be a number" }),
-    quantity: z.number(),
+    quantity: z.number({ message: "Quantity must be a number" }),
     category: z.string(),
     description: z.string()
   });
@@ -98,15 +79,14 @@ export default function Product({ params }: { params: { slug: string } }) {
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
     let data: any = {
-      product_id: Number(params.slug),
       obj: values,
       token: localStorage.getItem('posauth')
     }
-    updateProduct(data).then((response:any)=> {
+    addProduct(data).then((response:any)=> {
       if(response.status) {
         toast({
           variant: "destructive",
-          title: "Product updated successfully"
+          title: "Product added successfully"
         })
         setTimeout(()=> {
           router.push('/dashboard/products')
@@ -132,14 +112,14 @@ export default function Product({ params }: { params: { slug: string } }) {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Edit Product</BreadcrumbPage>
+              <BreadcrumbPage>Add Product</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
         <Card className="w-full bg-muted/40">
           <CardHeader>
-            <CardTitle className="text-primary">Edit Product</CardTitle>
-            <CardDescription>Update product you want to be</CardDescription>
+            <CardTitle className="text-primary">Add Product</CardTitle>
+            <CardDescription>Add product you want to be</CardDescription>
           </CardHeader>
           <CardContent>
             <Form {...form}>

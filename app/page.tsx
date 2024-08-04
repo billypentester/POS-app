@@ -45,7 +45,7 @@ export default function Home() {
         <div className="h-screen flex items-center justify-center">
           <Card className="w-1/3 text-center">
             <CardHeader>
-              <CardTitle>POS Appp</CardTitle>
+              <CardTitle>POS App</CardTitle>
               <CardDescription>A complete dynamic solution for retails and sales</CardDescription>
             </CardHeader>
             <CardContent>
